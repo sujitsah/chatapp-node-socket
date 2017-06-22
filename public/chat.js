@@ -5,10 +5,11 @@
 var socket = io.connect('http://localhost:8080');
 
 //variable assign
-var message=document.getElementById('message');
-    handle=document.getElementById('handle');
-    btn=document.getElementById('button');
-    output=document.getElementById('output');
+var message=document.getElementById('message'),
+    handle=document.getElementById('handle'),
+    btn=document.getElementById('button'),
+    output=document.getElementById('output'),
+    feedback = document.getElementById('feedback');
 
 
 
@@ -18,7 +19,11 @@ var message=document.getElementById('message');
          message: message.value,
          handle: handle.value
      });
-
+    
+ });
+ 
+ message.addEventListener('keypress',function () {
+    socket.emit('typing',handle.value);
  });
 
  
@@ -28,4 +33,10 @@ var message=document.getElementById('message');
      output.innerHTML+= '<p><strong>' + data.handle + ':</strong>' + data.message + '</p>';
 
      
+ });
+
+ //listening for typing
+
+ socket.on('typing',function (data) {
+     feedback.innerHTML = '<p><em>' + data + ' is typing a message.... </em></p>';
  });
